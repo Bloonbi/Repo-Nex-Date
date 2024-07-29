@@ -7,9 +7,9 @@ if (isset($_GET['producto'])) {
     try {
 
 
-        $sql = "SELECT * FROM producto WHERE Nombre LIKE :nombre";
+        $sql = "SELECT * FROM producto WHERE Nombre LIKE '%$nombreProducto%'";
         $stmt = $con->prepare($sql);
-        $stmt->execute(['nombre' => "%$nombreProducto%"]);
+        $stmt->execute();
 
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
