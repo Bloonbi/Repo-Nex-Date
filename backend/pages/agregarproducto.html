@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/style.css">
     <title>Formulario de Producto</title>
 </head>
 <body>
-    <h2>Formulario para agregar Producto</h2>
+    <h1>Formulario para agregar Producto</h1>
     <form action="../php/agregarproducto.php" method="GET">
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br>
@@ -26,7 +27,9 @@
         <label for="fecha_vencimiento">Fecha de Vencimiento:</label><br>
         <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" required><br>
 
-        <input type="submit" value="Agregar Producto">
+        <input class="boton" type="submit" value="Agregar Producto">
     </form>
+   <br><a  class="boton" href=../pages/main.html>volver </a>
+
 </body>
 </html>
