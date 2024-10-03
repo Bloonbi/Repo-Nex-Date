@@ -7,8 +7,7 @@ const nav = document.getElementById('nav');
 const logout = document.getElementById('logout');
 const registerButton = document.getElementById('registerButton');
 const loadProducts = document.getElementById('loadProducts');
-
-
+const productContainer = document.getElementById('productContainer');
 
 // login
 document.getElementById('loginButton').addEventListener('click', function() {
@@ -61,6 +60,7 @@ logout.addEventListener('click', function(){
                 nav.style.display = 'none';
                 registrarProductoVentana.style.display = 'none';
                 titulo.style.display = "block";
+                productContainer.style.display = 'none';
             }
         })
         .catch(error => {
@@ -101,9 +101,9 @@ fetch('./serv_admin/agregarproductos.php', {
     bienvenido.textContent = 'Error al guardar el producto';
 });
 })
-//Funcion para cargar productos
+//Funcion para cargar producto
 function loadProduct(page = 1) {
-    fetch(`serv_admin/listar_productos.php?page=${page}`)
+    fetch(`./serv_admin/listar_productos.php?page=${page}`)
     .then(response => response.json())
     .then(data => {
         if (data.error) {
@@ -112,20 +112,47 @@ function loadProduct(page = 1) {
         }
     //Construccion de objetos
         productContainer.innerHTML = '';
-        data.productos.forEach(product => {
+        data.producto.forEach(product => {
             const productElement = document.createElement('div');
             productElement.classList.add('product');
             productElement.innerHTML = `
                 <h3>${product.nombre}</h3>
                 <p>${product.descripcion}</p>
                 <p>Precio: $${product.precio}</p>
-                <p>Cantidad: $${product.cantidad}</p>
-                <img src="serv_admin/${product.imagen}" alt="${product.nombre}" class="productimg">
+                <p>Cantidad: ${product.cantidad}</p>
+                <img src="serv_admin/${product.imagen}" alt="${product.nombre}">
+                <br>
                 <button onclick="editProduct(${product.idProd})">Editar</button>
                 <button onclick="deleteProduct(${product.idProd})">Eliminar</button>
             `;
             productContainer.appendChild(productElement);
         });
+//Funcion para eliminar producto
+        window.deleteProduct = function(id) {
+            if (confirm('¿Está seguro de que desea eliminar este producto?')) {
+                const formData = new FormData();
+                formData.append('idProd', id);
+    
+                fetch('./serv_admin/eliminar_productos.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        bienvenido.textContent = data.success;
+                        loadProduct();
+                    } else {
+                        bienvenido.textContent = data.error;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    bienvenido.textContent = 'Error al eliminar producto';
+                });
+            }
+        }
+
 //Comienza codigo para paginacion
         setupPagination(data.totalPages, data.currentPage);
     })
