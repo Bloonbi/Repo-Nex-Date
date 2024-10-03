@@ -14,16 +14,18 @@ $address = $_POST['address'];
 $phone = $_POST['phone'];
 $date = date('Y-m-d');
 
+
+    // Check if all required fields are provided
     if (!$name || !$email || !$password || !$address || !$phone) {
         echo json_encode(['error' => 'Todos los campos son requeridos']);
         exit();
     }
 
-
+    // Hash the password
     $password_hashed = password_hash($password, PASSWORD_BCRYPT);
 
     try {
-
+        // Insert Cliente into the database
         $stmt = $con->prepare("INSERT INTO cliente (Nombre, Email, Password, Direccion, Telefono, Fecha_registro) VALUES (:nombre, :email, :password, :address, :phone, :date)");
         $stmt->bindParam(':nombre', $name);
         $stmt->bindParam(':email', $email);
@@ -33,6 +35,7 @@ $date = date('Y-m-d');
         $stmt->bindParam(':date', $date);
         $stmt->execute();
 
+        // Fetch the new Cliente to set session variable
         $stmt = $con->prepare("SELECT * FROM cliente WHERE Email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
