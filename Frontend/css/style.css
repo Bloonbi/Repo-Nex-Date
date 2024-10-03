@@ -292,6 +292,7 @@ button {
   display: inline;
 }
 .imglogo {
+  background-color: white;
   position: absolute;
   top: 5%;
   left: 3%;
@@ -299,6 +300,7 @@ button {
   height: auto;
   margin-top: 1%;
   min-width: 120px;
+  filter: drop-shadow(0px 0px 12px black);
 }
 
 /* header section end */
